@@ -37,8 +37,10 @@
  -}
 
 module Main (main) where
-import Array
-import System
+import GHC.Arr
+import System.IO
+
+import G2.Symbolic
 
 -- Generation of radicals
 
@@ -116,8 +118,8 @@ paraffins_until n =
   radicals = radical_generator (div n 2)
 
 main = do
-  [arg] <- getArgs
-  let num = read arg
+  arg <- mkSymbolic
+  let num = arg
   print [length (rads!i) | rads <- [(radical_generator num)], i <- [0..num]]
   print (bcp_until num)
   print (ccp_until num)

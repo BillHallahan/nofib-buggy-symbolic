@@ -28,51 +28,40 @@
 --  This program contains a bug of tipe 1              --
 ---------------------------------------------------------
 
-Compute the digits of "e" using continued fractions.
-Original program due to Dale Thurston, Aug 2001
+{-
+Date: Tue, 15 Dec 92 14:39:56 +0100
+From: Lennart Augustsson <augustss@cs.chalmers.se>
+Message-Id: <9212151339.AA26402@animal.cs.chalmers.se>
+To: partain@dcs.gla.ac.uk
+Subject: Re: ghc 0.10 in animal:pub/incoming
 
-> module Main where
-> import System (getArgs)
+...
 
-> type ContFrac = [Integer]
+I'd also like to contribute a small benchmark to your nofib suite, but it is
+of the nfib kind:
 
-Compute the decimal representation of e progressively.
+<below>
 
-A continued fraction expansion for e is
+It compute a root to the equation x^n = 1 (i.e. mkPolar 1 (2*pi/fromInt n)),
+and raises it to the n:th power to get 1, sums a few of these and prints the
+result.  The result of this program should be 10000.  It a reasonable test
+of how well complex numbers are handled by the compiler.
+My ulteriour motive for suggesting this benchmark is that the next version
+of hbc will do pretty well on this example.  Since you have had the choice
+of all the other programs I thought I'd contribute at least one :-)
 
-[2,1,2,1,1,4,1,1,6,1,...]
+...
+-}
 
-> eContFrac :: ContFrac
-  -- BUG: The following line contains a bug:
-> eContFrac = 2:aux 2 where aux n = 1:n:1:aux (n)
-  -- CORRECT -- eContFrac = 2:aux 2 where aux n = 1:n:1:aux (n+2)
+module MainBuggy where
+import Data.Complex
+import System.IO
 
-We need a general function that applies an arbitrary linear fractional
-transformation to a legal continued fraction, represented as a list of
-positive integers.  The complicated guard is to see if we can output a
-digit regardless of what the input is; i.e., to see if the interval
-[1,infinity) is mapped into [k,k+1) for some k.
+-- main = do
+-- 	[arg] <- getArgs
+-- 	print (round (realPart (sum [f n | n <- [1 .. (read arg)]])))
 
-> -- ratTrans (a,b,c,d) x: compute (a + bx)/(c+dx) as a continued fraction 
-> ratTrans :: (Integer,Integer,Integer,Integer) -> ContFrac -> ContFrac
-> -- Output a digit if we can
-> ratTrans (a,b,c,d) xs |
->   ((signum c == signum d) || (abs c < abs d)) && -- No pole in range
->   (c+d)*q <= a+b && (c+d)*q + (c+d) > a+b       -- Next digit is determined
->      = q:ratTrans (c,d,a-q*c,b-q*d) xs
->   where q = b `div` d
-> ratTrans (a,b,c,d) (x:xs) = ratTrans (b,a+x*b,d,c+x*d) xs
-
-Finally, we convert a continued fraction to digits by repeatedly multiplying by 10.
-
-> toDigits :: ContFrac -> [Integer]
-> toDigits (x:xs) = x:toDigits (ratTrans (10,0,0,1) xs)
-
-> e :: [Integer]
-> e = toDigits eContFrac
-
-> main = do
->	[digits] <- getArgs
->	print (take (read digits) e)
-
-
+f :: Int -> Complex Double
+-- BUG: The following line contains a bug:
+f n = mkPolar 1 (pi/fromIntegral n) ^ n
+-- CORRECT -- f n = mkPolar 1 ((2*pi)/fromIntegral n) ^ n

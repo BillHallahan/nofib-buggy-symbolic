@@ -32,7 +32,7 @@ Compute digits of e
 Due to John Hughes, Aug 2001
 
 > module Main where
-> import System
+> import G2.Symbolic
 
 Here's a way to compute all the digits of e. We use the series
 
@@ -72,9 +72,13 @@ works.
 >       = (dCorrected `div` base) : (dCorrected `mod` base) : fraction
 >   where carryguess = d `div` base
 >         remainder = d `mod` base
+
 -- BUG: The following line contains a bug:
->	nextcarry:fraction = carryPropagate (base-1) ds
+
+>         nextcarry:fraction = carryPropagate (base-1) ds
+
 -- CORRECT -- nextcarry:fraction = carryPropagate (base+1) ds
+
 >         dCorrected = d + nextcarry
 
 > e :: String
@@ -85,5 +89,5 @@ works.
 >     2:[1,1..]
 
 > main = do
-> 	[digits] <- getArgs
-> 	print (take (read digits) e)
+> 	digits <- mkSymbolic
+> 	print (take digits e)
