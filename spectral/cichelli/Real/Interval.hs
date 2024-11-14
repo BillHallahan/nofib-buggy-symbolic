@@ -1,4 +1,4 @@
-module Interval where
+module Real.Interval where
 
 polling = 5::Int
 

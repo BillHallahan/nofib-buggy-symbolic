@@ -1,4 +1,6 @@
-module Prog(prog) where
+module Buggy.Prog(prog, cichelli) where
+
+import KeyIORef
 
 -- ************** SeqSer *************
 
@@ -6,13 +8,11 @@ module Prog(prog) where
 -- sequential 
 
 --partain:import Libfuns
-import Auxil
-import Key
+import Buggy.Auxil
 
 prog :: String -> String
 prog _ = show cichelli
 
-data Status a = NotEver Int | YesIts Int a deriving ()
 instance (Show a) => Show (Status a) where
     showsPrec d (NotEver i) = showParen (d >= 10) showStr
       where

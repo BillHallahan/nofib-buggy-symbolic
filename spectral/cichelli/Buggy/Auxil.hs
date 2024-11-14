@@ -28,9 +28,9 @@
 --  This program contains a bug of tipe 1              --
 ---------------------------------------------------------
 
-module Auxil where
+module Buggy.Auxil where
 
-import Key
+import KeyIORef
 
 data Key = K String Char Char Int {- String, end letters, length of string -}
 data HashSet = H (Maybe Int) (Maybe Int) [Int]

@@ -1,3 +1,56 @@
+This is an adaption of the Buggy Nofib Haskell benchmark suite to evaluate symbolic execution tools.
+
+Most bugs of type 1 and type 3 (see below) are considered.  We exclude type 3 bugs that correspond to
+stack overflows, as symbolic executors are not (generally) able to detect stack overflows.
+
+Type 1 bugs produce an incorrect results.  For the purpose of evaluating symbolic execution,
+we equate the value returned by the buggy code and the correct code, and task the symbolic
+executor with finding an inputting that violates the equality.
+
+Type 3 bugs produce an exception (such as division by 0.)  Type 3 benchmarks are directly
+symbolically executed, to look for an error.
+
+We make use of a special mkSymbolic function:
+  mkSymbolic :: IO a
+which we assume the symbolic executor will recognize as introducing a new symbolic (unknown) value.
+For nofib buggy benchmarks which accept input as command line arguments or command line input,
+we substitute mkSymbolic to provide symbolic arguments/input.
+
+Some nofib benchmarks do not accept input, and simply compute a constant.  For these benchmarks,
+we adjust the first function with interesting (used) arguments and pass symbolic values in place
+of the constant arguments in the original benchmark.  In some cases, we have to add arguments, or
+use an (unsafe) IORef to introduce a shared symbolic "constant" (see cichelli for an example.)
+
+We add Eq typeclass as needed (via deriving) to assert equality of returned values.  For Type 1 benchmarks,
+we move datatypes that are returned into a module shared by both the Buggy and Real programs.
+
+Notes on specific benchmarks:
+
+- imaginary/gen_regexps
+    - This benchmark has a bug of type 1, and uses the interact function from the standard library:
+        interact :: (String -> String) -> IO ()
+    Calling `interact f` (1) reads from the command line (2) passes what was read to f (3) prints the string
+    returned by the command line.
+
+    We define an interact2 function:
+      interact2 :: (String -> String) -> (String -> String) -> IO ()
+    to pass inputs to both the buggy and real programs, and compare their outputs.
+- spectral/cichelli
+    - The nofib-buggy cichelli benchmark has a bug of type 1, and no inputs.  Thus, we need to add an input
+    to have an interesting benchmark for symbolic execution.  We do this by making the `keys` variable symbolic.
+    Because this variable is used at multiple places in the code, and passing it to each of those points would be
+    a pain, we instead use an unsafely-accessed IORef to hold the symbolic value.
+- spectral/minimax
+    - TBD
+- spectral/sorting
+    - The benchmark includes a "mangle" function which allows choosing between executing one of a number of sorting algorithms.
+    The bug is in the heap sort implementation.  However, the main function in nofib-buggy included the line:
+      putStr (mangle "quicksort" cs)
+    which restricted the program to only running the quicksort algorithm.  We have made the algorithm selection symbolic, to allow
+    running any of the sort algorithms.
+
+------------------------------------------------------------------------------
+
 This is the root directory of the "Buggy NoFib Haskell benchmark suite".
 
 It is a 'buggy' version of the nofib collection of Haskell

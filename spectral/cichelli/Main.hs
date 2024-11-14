@@ -1,14 +1,13 @@
-module Main where
+import qualified Buggy.Prog as B
+import qualified Real.Prog as R
 
-import Prog (prog)
+import G2.Symbolic
 
--- #ifdef PAR
--- main input = prog input
--- #else
--- partain: doesn't actually look at input;
--- real input is wired into Key.lhs
+main = do 
+ -- Buggy
+ let bb = B.cichelli
 
-main = do
-    str <- getContents
-    putStr (prog str)
--- #endif
+ -- Real
+ let rb = R.cichelli
+
+ assertIO (bb == rb)
