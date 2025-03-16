@@ -46,7 +46,9 @@ Haskell and here is the result using hbc.
 -}
 
 ----------------------------------------------------------
-import System
+import System.IO
+
+import G2.Symbolic
 
 infix 8 ^^^
 
@@ -72,8 +74,8 @@ x ^^^ S y = x * (x ^^^ S y)
 
 
 main = do
-	[power] <- getArgs
-	print $ int (3 ^^^ (fromInteger $ read power))
+	power <- mkSymbolic
+	print $ int (3 ^^^ (fromInteger power))
 
 --
 -- Timing for hbc version 0.997.2
