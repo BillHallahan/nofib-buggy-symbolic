@@ -1,0 +1,14 @@
+bernouilli,1
+digits-of-e1,1
+digits-of-e2,3
+exp3_8,3                    # Stack Overflow
+gen_regexps,1
+integrate,1
+paraffins,3
+primes,2
+queens,2                    # ERROR - C stack overflow
+rfib,1
+tak,1
+wheel-sieve1,1
+wheel-sieve2,1
+x2n1,1
