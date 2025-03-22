@@ -28,12 +28,12 @@
 --  This program contains a bug of tipe 1              --
 ---------------------------------------------------------
 
-module Prog(prog) where
+module Buggy.Prog(prog) where
 
-import Board
-import Wins
-import Game
-import Tree
+import Buggy.Board
+import Buggy.Wins
+import Buggy.Game
+import Buggy.Tree
 
 
 prog :: String -> String

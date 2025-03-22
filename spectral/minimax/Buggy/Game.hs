@@ -1,8 +1,8 @@
-module Game where
+module Buggy.Game where
 
-import Board
-import Wins
-import Tree
+import Buggy.Board
+import Buggy.Wins
+import Buggy.Tree
 
 type Player = Evaluation -> Evaluation -> Evaluation
 type Move = (Board,Evaluation)
