@@ -1,12 +1,14 @@
-module Main where
+import qualified Buggy.Prog as B
+import qualified Real.Prog as R
 
-import Prog (prog)
+import G2.Symbolic
 
--- #ifdef PAR
--- main input = prog input
--- #else
--- suspect:main ~((Str str):_) = [ReadChan stdin, AppendChan stdout (prog str)]
-main = do
-    _ <- getContents -- useless, but that's how it was written
-    putStr (prog "")
--- #endif
+main = do 
+ xs <- mkSymbolic
+ -- Buggy
+ let bb = B.prog xs
+
+ -- Real
+ let rb = R.prog xs
+
+ assertIO (bb == rb)

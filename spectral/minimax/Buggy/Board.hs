@@ -1,6 +1,6 @@
-module Board where
+module Buggy.Board where
 
-import Wins
+import Buggy.Wins
 
 type Board = [Row] 
 type Row = [Piece]

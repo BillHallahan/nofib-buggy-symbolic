@@ -1,4 +1,4 @@
-module Tree where
+module Buggy.Tree where
 
 data Tree a = Branch a [Tree a] deriving Show{-was:Text-}
 
