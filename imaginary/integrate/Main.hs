@@ -5,6 +5,7 @@ import G2.Symbolic
 
 main = do
     range <- mkSymbolic
+    assumeIO (range >= 0)
  
     -- Buggy
     let bb = B.etotal range

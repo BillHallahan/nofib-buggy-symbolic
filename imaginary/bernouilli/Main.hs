@@ -5,6 +5,7 @@ import G2.Symbolic
 
 main = do
  arg <- mkSymbolic
+ assumeIO (arg >= 0)
  let n = (arg)::Int
  
  -- Buggy
