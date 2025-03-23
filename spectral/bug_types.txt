@@ -5,10 +5,10 @@ fish,1
 knights,2
 life,2
 mandel,2
-minimax,2
+minimax,1
 multiplier,2                    
 pretty,2
 primetest,2
 rewrite,2
 scc,2
-sorting,2
+sorting,3

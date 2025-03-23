@@ -1,25 +1,15 @@
-module Main where
-
-import Sort
+import qualified Buggy.Main as B
+import qualified Real.Main as R
 
 import G2.Symbolic
 
-main = do
+main = do 
     s <- mkSymbolic
     cs <- getContents
-    putStr (mangle s cs)
+ -- Buggy
+ let bb = B.mangle s cs
 
-mangle :: String{-opt-} -> String{-input to sort-} -> String{-output-}
-mangle opt inpt
-  = (unlines . sort . lines) inpt
-  where
-    sort = case opt of
-         "heapSort"		-> heapSort
-         "insertSort"	-> insertSort
-         "mergeSort"	-> mergeSort
-         "quickSort"	-> quickSort
-         "quickSort2"	-> quickSort2
-         "quickerSort"	-> quickerSort
-         "treeSort"		-> treeSort
-         "treeSort2"	-> treeSort2
-         _ -> error ("unrecognized opt: "++opt++"\n")
+ -- Real
+ let rb = R.mangle xs
+
+ assertIO (bb == rb)
